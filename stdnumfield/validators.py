@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.template.defaultfilters import truncatechars
 from stdnum.exceptions import ValidationError as Stdnum_ValidationError
 from django.utils.deconstruct import deconstructible
+from django.utils.translation import ugettext_lazy as _
 
 from stdnumfield import settings
 from stdnumfield.utils import import_stdnum, listify
@@ -54,5 +55,7 @@ class StdnumFormatValidator(object):
                 else:
                     return
         raise ValidationError(
-            'Value does not match with any of the formats: "{}"'
-            .format(truncatechars(', '.join(self.formats), 30)))
+            _('Value does not match with any of the formats: "%(formats)s"'),
+            code='invalid',
+            params={'formats': truncatechars(', '.join(self.formats), 30)}
+        )
